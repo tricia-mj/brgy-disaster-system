@@ -1,18 +1,23 @@
 <?php
 include '../db_connect.php';
+
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $type = $_POST['disaster_type'];
     $people = $_POST['affected_people'];
     $time = $_POST['response_time'];
     $actions = $_POST['actions_taken'];
-    $conn->query("INSERT INTO incidents (disaster_type, affected_people, response_time, actions_taken) VALUES ('$type','$people','$time','$actions')");
-    echo "Incident logged.";
+
+    // Use prepared statement to prevent SQL injection
+    $stmt = $conn->prepare("INSERT INTO incidents (disaster_type, affected_people, response_time, actions_taken) VALUES (?, ?, ?, ?)");
+    $stmt->bind_param("siss", $type, $people, $time, $actions);
+
+    if ($stmt->execute()) {
+        echo "✅ Incident logged successfully.";
+    } else {
+        echo "❌ Error: " . $stmt->error;
+    }
+
+    $stmt->close();
+    $conn->close();
 }
 ?>
-<form method="POST">
-  Disaster Type: <input type="text" name="disaster_type"><br>
-  Affected People: <input type="number" name="affected_people"><br>
-  Response Time: <input type="text" name="response_time"><br>
-  Actions Taken: <textarea name="actions_taken"></textarea><br>
-  <button type="submit">Log Incident</button>
-</form>
