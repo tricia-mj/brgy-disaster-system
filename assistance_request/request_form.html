@@ -1,0 +1,16 @@
+<form action="submit_request.php" method="POST">
+  Name: <input type="text" name="name"><br>
+  Contact: <input type="text" name="contact"><br>
+  Request Type: <select name="request_type">
+    <option value="rescue">Rescue</option>
+    <option value="food">Food</option>
+    <option value="first_aid">First Aid</option>
+  </select><br>
+  Urgency: <select name="urgency">
+    <option value="low">Low</option>
+    <option value="medium">Medium</option>
+    <option value="high">High</option>
+  </select><br>
+  Details: <textarea name="details"></textarea><br>
+  <button type="submit">Submit Request</button>
+</form>
